@@ -51,7 +51,7 @@ workflows:
             - install_dependencies
       - build:
           requires:
-            - audit
+            - install_dependencies
       - test:
           requires:
             - build
