@@ -28,6 +28,13 @@ jobs:
       - checkout
       - run: yarn audit
 
+  lint:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run: yarn lint
+
   build:
     docker:
       - image: circleci/node:12
@@ -47,6 +54,9 @@ workflows:
     jobs:
       - install_dependencies 
       - audit:
+          requires:
+            - install_dependencies
+      - lint:
           requires:
             - install_dependencies
       - build:
