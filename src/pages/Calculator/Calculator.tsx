@@ -80,7 +80,7 @@ export const CalculatorPage: React.FC<Props> = (props: Props) => {
           <div className={classes.buttonContainer}>
             <Button variant="contained" onClick={sendData(result)}>
               <span style={{color: result > 500 ? "#ff0f0f" : "#fff"}}>
-                {result} Kcal
+                {result} Kcals
               </span>
             </Button>
           </div>
