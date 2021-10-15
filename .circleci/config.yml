@@ -1,14 +1,12 @@
 version: 2.1
 jobs:
-  build-test:
-    docker:
-      # specify the version you desire here
-      - image: circleci/node:12
 
+  install_dependencies:
+    docker:
+      - image: circleci/node:12
     steps:
       - checkout
 
-      # Download and cache dependencies
       - restore_cache:
           keys:
           - v1-dependencies-{{ checksum "package.json" }}
@@ -23,11 +21,37 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
 
-      # run tests!
-      - run: yarn test
+  audit:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run: yarn audit
+
+  build:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
       - run: yarn build
 
+  test:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout
+      - run: yarn test
+
 workflows:
-  node-tests:
+  build_and_test:
     jobs:
-      - build-test
+      - install_dependencies 
+      - audit:
+          requires:
+            - install_dependencies
+      - build:
+          requires:
+            - audit
+      - test:
+          requires:
+            - build
